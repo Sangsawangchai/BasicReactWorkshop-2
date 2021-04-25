@@ -1,27 +1,29 @@
 import React, { useEffect, useState } from 'react'
 import NoAuth from '../layout/NoAuth'
-import { Form, Button, Alert } from 'react-bootstrap'
+import { Form, Button } from 'react-bootstrap'
 import { useForm } from 'react-hook-form'
+import * as api from "../api/auth"
+import { useHistory } from 'react-router';
 
-const login = {
-    email: 'test@test.com',
-    password: '123456'
-}
+// const login = {
+//     email: 'test@test.com',
+//     password: '123456'
+// }
 
-const AlertLogin = (props) => {
+// const AlertLogin = (props) => {
 
-    useEffect(() => {
-        console.log('mounting');
-        return () => {
-            console.log('unmounting');
-        }
-    }, [])
+//     useEffect(() => {
+//         console.log('mounting');
+//         return () => {
+//             console.log('unmounting');
+//         }
+//     }, [])
 
-    if (props.isLogin) {
-        return (<Alert variant='success'>
-            Login Success
-        </Alert>)
-    }
+//     if (props.isLogin) {
+//         return (<Alert variant='success'>
+//             Login Success
+//         </Alert>)
+//     }
 
     // const a;
 
@@ -37,14 +39,14 @@ const AlertLogin = (props) => {
     // a มีค่าข้างในตัวแปรที่ไม่ใช่ null,0,'',false
 
 
-    if (!props.isLogin && props.error) {
-        return (<Alert variant='danger'>
-            {props.error}
-        </Alert>)
-    }
+//     if (!props.isLogin && props.error) {
+//         return (<Alert variant='danger'>
+//             {props.error}
+//         </Alert>)
+//     }
 
-    return (<></>)
-}
+//     return (<></>)
+// }
 // let anonyUseEffect
 
 // Login()
@@ -53,6 +55,7 @@ const AlertLogin = (props) => {
 // if(unmount === function) ? unmount() : null
 
 function Login() {
+    const history = useHistory();
     const { register, handleSubmit, reset, formState: { errors } } = useForm()
 
     const [rememberMe, setRememberMe] = useState(false)
@@ -62,16 +65,35 @@ function Login() {
         error: '',
     })
 
-    console.log(errors)
+    // console.log(errors)
 
     const onSubmit = (data) => {
-        if (data.email === login.email && login.password === data.password) {
-            setCheckLogin({ isSuccess: true, error: '' })
-        } else {
-            setCheckLogin({ isSuccess: false, error: 'Login Fail.' })
+        // const param = { 
+        //     username : data.email,
+        //     password : data.password
+        // }
+        
+        api.login(data.email,data.password).then(res=>{
+              reset()
+              history.push('/')
+            }).catch(err => {
+                setCheckLogin({ isSuccess: false, error: 'Login Fail.' })
+            })
         }
-        reset()
-    }
+        // .then(res => {
+        //     console.log('Success==:>',res.data);
+        //     setCheckLogin({ isSuccess: true, error: '' })
+        //     history.push('/')
+        // })
+        // .catch(error => {
+        //     console.log('Error==:>',error);
+        //     setCheckLogin({ isSuccess: false, error: 'Login Fail.' })
+        // })
+        // if (data.email === login.email && login.password === data.password) {
+        //     setCheckLogin({ isSuccess: true, error: '' })
+        // } else {
+        //     setCheckLogin({ isSuccess: false, error: 'Login Fail.' })
+        // }
 
     const handleRememberMe = () => {
         setRememberMe(!rememberMe)
@@ -82,7 +104,7 @@ function Login() {
     useEffect(() => {
         // console.log('useEffect');
         return () => {
-
+            
         }
     }, [])
 
@@ -90,6 +112,7 @@ function Login() {
 
     return (
         <NoAuth>
+            
             <Form
                 onSubmit={handleSubmit(onSubmit)}
                 style={{
@@ -98,7 +121,7 @@ function Login() {
             >
                 <h1 className="h3 mb-3 fw-normal" style={{ textAlign: 'center' }}>Please sign in</h1>
                 {/** เช็คเงื่อนไข การแสดงผล */}
-                <AlertLogin isLogin={checkLogin.isSuccess} error={checkLogin.error} />
+                {/* <AlertLogin isLogin={checkLogin.isSuccess} error={checkLogin.error} /> */}
 
 
                 <div className="form-floating">
