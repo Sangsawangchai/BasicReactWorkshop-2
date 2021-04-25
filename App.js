@@ -9,6 +9,7 @@ import About from './screens/About'
 import Home from './screens/Home'
 import Users from './screens/Users'
 import Login from './screens/Login'
+import Register from './screens/Register'
 
 export default function App() {
   return (
@@ -24,7 +25,7 @@ export default function App() {
           <Login />
         </Route>
         <Route path='/register'>
-          <Login />
+          <Register/>
         </Route>
         <Route path="/">
           <Home />
